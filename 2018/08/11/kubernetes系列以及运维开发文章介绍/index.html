@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="你们的威哥">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="kubernetes系列以及运维开发文章介绍"/>
+  <meta property="og:description" content="" />
+  <meta property="og:site_name" content="你们威哥的博客"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://aronligithub.github.io"/>
+  
+    <link rel="alternate" href="/atom.xml" title="你们威哥的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <!-- Site Title -->
+  <title>你们威哥的博客</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  
+  <link rel="stylesheet" href="/css/style.light.css">
+
+  <!-- Google Analytics -->
+  
+
+
+</head>
+
+  <body >
+	
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/city_technology.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">kubernetes系列以及运维开发文章介绍</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/AronLiGitHub">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:357018097@qq.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+            <!-- Author -->
+            <span class="author info">By 你们的威哥</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2018-08-11</span>
+            <span class="time">23:06:45</span>
+          </span>
+          
+          <!--  Categories  -->
+            <span class="categories info">Under 
+
+<a href="/categories/运维开发系列/">运维开发系列</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+          <div class="post-tags text-muted">
+            Tags: 
+
+<a class="tag" href="/tags/kubernetes系列/">#kubernetes系列</a>
+
+
+          </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <blockquote>
+<p>#原创内容，转载请注明出处</p>
+</blockquote>
+<p>博主地址：<a href="https://aronligithub.github.io/">https://aronligithub.github.io/</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p> <em>kubernetes作为当前最流行的容器编排领先技术之一，如果作为运维的你不学习怎么行呢？</em><br><img src="https://upload-images.jianshu.io/upload_images/13423234-1ca8c290d56896ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</blockquote>
+<p>如果你继续往下看我后续写的博客内容可以<strong>学习到什么内容</strong>呢？</p>
+<blockquote>
+<p><em>etcd 系列</em></p>
+<ul>
+<li>etcd单台部署，启用https以及ca自签名</li>
+<li>etcd多台部署，启用https以及ca自签名</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>kubernetes系列</em></p>
+<ul>
+<li>kubernetes master 启用RBAC、CA自签名、二进制部署全过程</li>
+<li>kubernetes node 启用RBAC、CA自签名、二进制部署全过程</li>
+<li>Calico集成kubernetes的CNI网络部署全过程、启用CA自签名 </li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>kubernetes组件系列</em></p>
+<ul>
+<li>CoreDNS 使用以及部署，统一管理kuernetes网络的DNS解析</li>
+<li>Dnsmasq部署，统一管理物理机以及kubernetes所有网络的DNS解析</li>
+<li>registry 私有仓库的部署，用于管理kubernetes集群中所需要的镜像</li>
+<li>Traefik ingress使用以及部署，提供kubernetes服务入口  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>docker系列</em></p>
+<ul>
+<li>docker的安装部署</li>
+<li>镜像的定义以及构建、修改（该部分内容后续会单独编写一个docker系列进行讲解）</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>yum离线源系列</em></p>
+<ul>
+<li>针对政府级别无网络环境的centos7系列服务器集群如何无网络部署</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>网络代理系列</em></p>
+<ul>
+<li>针对政府级别无网络环境，如何对正向、反向请求进行代理</li>
+<li>如何使用ssh隧道正向、反向端口绑定以及映射转发</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>自动化部署开发系列</em></p>
+<ul>
+<li>解决kubenernetes运维入门的门槛，开发使用kunernetes组件自动化部署</li>
+<li>开发自动化部署docker </li>
+<li>开发自动化部署etcd单台、三台脚本</li>
+<li>开发自动化部署mysql主从</li>
+<li>开发自动化部署dnsmasq</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><em>数据如何清洗、处理系列</em></p>
+<ul>
+<li>面对百万计杂乱图片，如何应对整理并上传文件服务</li>
+<li>千万级数据清洗处理全过程</li>
+</ul>
+</blockquote>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+    <!-- Footer -->
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer>
+
+  <!--pv的方式，单个用户连续点击n篇文章，记录n次访问量-->
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Theme By <a target="_blank" href="https://github.com/levblanc">Levblanc.</a>
+          Inspired By <a target="_blank" href="https://github.com/klugjo/hexo-theme-clean-blog">Clean Blog.</a>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+
+    <!-- After Footer Scripts -->
+<script src="/js/highlight.pack.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+   	
+  </body>
+</html>
+
