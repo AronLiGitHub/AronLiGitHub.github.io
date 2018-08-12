@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://aronligithub.github.io/"/>
-  <updated>2018-08-11T15:18:04.612Z</updated>
+  <updated>2018-08-12T01:05:19.014Z</updated>
   <id>https://aronligithub.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>etcd原理以及基本技术概述铺垫</title>
+    <link href="https://aronligithub.github.io/2018/08/12/etcd%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E5%9F%BA%E6%9C%AC%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0%E9%93%BA%E5%9E%AB/"/>
+    <id>https://aronligithub.github.io/2018/08/12/etcd原理以及基本技术概述铺垫/</id>
+    <published>2018-08-12T01:00:22.000Z</published>
+    <updated>2018-08-12T01:05:19.014Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>#原创内容，转载请注明出处</p></blockquote><p>博主地址：<a href="https://aronligithub.github.io/">https://aronligithub.github.io/</a></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote><p><em>在部署kubernetes和calico网络的过程中，都需要有一个etcd数据库进行数据记录。这是部署的前置组件。</em></p></blockquote><h2 id="可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？"><a href="#可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？" class="headerlink" title="可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？"></a><strong>可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？</strong></h2><hr><a id="more"></a><h2 id="etcd的介绍"><a href="#etcd的介绍" class="headerlink" title="etcd的介绍"></a>etcd的介绍</h2><blockquote><p><em>etcd的官网</em></p></blockquote><p>作为要了解etcd这个数据库，那么<strong>第一步就是要知道从哪里去访问<a href="https://coreos.com/etcd/" target="_blank" rel="noopener">官网</a></strong>，再下一步就是<strong>如何从官网中获取自己需要的文档资料</strong>。</p><blockquote><p><img src="https://upload-images.jianshu.io/upload_images/13423234-b863190257d8501d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="etcd官网的相关信息"></p></blockquote><blockquote><p><em>etcd的特征</em><br><img src="https://upload-images.jianshu.io/upload_images/13423234-3d05fe507722fb93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="etcd官网特征描述"></p></blockquote><hr><blockquote><p><em>etcd的技术概述</em></p></blockquote><p><strong>etcd是基于什么语言编写，通过什么算法保证数据集群同步的呢？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcd是用Go编写的，它具有出色的跨平台支持，小型二进制文件和背后的优秀社区。etcd机器之间的通信通过Raft一致性算法处理。</span><br></pre></td></tr></table></figure></p><p><strong>etcd的主从集群是怎么形式的呢，例如<code>一主多从</code>，还是<code>多主多从</code>呢？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在etcd的集群中会选举出一位leader，其他etcd服务节点就会成为follower，在此过程其他follower会同步leader的数据。</span><br><span class="line">由于etcd集群必须能够选举出leader才能正常工作，所以部署的服务器数量必须是奇数，例如：</span><br><span class="line">1，3，5，7，9 的etcd节点数量。</span><br></pre></td></tr></table></figure></p><p><strong>如果etcd的节点数量为<code>偶数</code>会怎么样？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果etcd的节点数量为偶数，例如：2，4，6，8 那么每一个节点都会收到同样的选举票数，就好像我们在班里选举班长一样，同样票数两个人是没法出leader的，谁也不服谁。</span><br><span class="line">那么这时候的结果当然就是etcd的集群无法工作了</span><br></pre></td></tr></table></figure></p><p><strong>那么如果etcd的节点数量为<code>奇数</code>，需要部署多少个节点最合适呢？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在考虑etcd读写效率以及稳定性的情况下，基本可以选型如下：</span><br><span class="line">只有单台或者两台服务器做kubernetes的服务集群，只需要部署一台etcd节点即可；</span><br><span class="line">只有三台或者四台服务器做kubernetes的服务集群，只需要部署三台etcd节点即可；</span><br><span class="line">只有五台或者六台服务器做kubernetes的服务集群，只需要部署五台etcd节点即可；</span><br></pre></td></tr></table></figure></p><p><strong>那么按照上面的公式推导，不就是etcd的节点越多越好？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">其实不是越多越好，基本三台和五台服务器作为etcd的节点已经比较稳定的了。</span><br></pre></td></tr></table></figure></p><p><strong>那么如果任性就是要服务器很多呢？会出现什么样的情况？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如果服务器的台数越多，就可能会出现网络抖动，延时、不稳定的情况，具体视机房网络情况;</span><br><span class="line">如果服务器的台数越多，你就需要管理以及维护观察更多的服务器，在修复故障的时候需要注意更多的服务器数量；</span><br><span class="line">另外，因为etcd的集群所有的follower都需要从leader同步完数据之后，leader才能继续写入新的数据，所以如果etcd的节点数量过多，则会导致同步的时间变长、导致leader的写入效率降低</span><br></pre></td></tr></table></figure></p><p><strong>综上所述，部署etcd集群采用1，3，5，7的台数部署是比较合理的了</strong></p><blockquote><p><strong><em>下一篇章，我就开始演示单台etcd的部署以及ca证书的创建，在之后演示三台的etcd集群部署。</em></strong></p></blockquote><blockquote><p><img src="https://upload-images.jianshu.io/upload_images/13423234-1ff65c0431d6b516.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="leader会将数据同步给每个follower"></p></blockquote><blockquote><p>如果你想要看我写的总体系列文章目录介绍，可以点击<a href="https://www.jianshu.com/p/4a9c06ea570b" target="_blank" rel="noopener">kuberntes以及运维开发文章目录介绍</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;#原创内容，转载请注明出处&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;博主地址：&lt;a href=&quot;https://aronligithub.github.io/&quot;&gt;https://aronligithub.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;在部署kubernetes和calico网络的过程中，都需要有一个etcd数据库进行数据记录。这是部署的前置组件。&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？&quot;&gt;&lt;a href=&quot;#可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？&quot; class=&quot;headerlink&quot; title=&quot;可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？&quot;&gt;&lt;/a&gt;&lt;strong&gt;可以说部署etcd就是踏入使用kubernetes的第一步，那么下面就来了解一下什么是etcd？&lt;/strong&gt;&lt;/h2&gt;&lt;hr&gt;
+    
+    </summary>
+    
+      <category term="运维开发系列" scheme="https://aronligithub.github.io/categories/%E8%BF%90%E7%BB%B4%E5%BC%80%E5%8F%91%E7%B3%BB%E5%88%97/"/>
+    
+    
+      <category term="kubernetes系列" scheme="https://aronligithub.github.io/tags/kubernetes%E7%B3%BB%E5%88%97/"/>
+    
+  </entry>
   
   <entry>
     <title>kubernetes系列以及运维开发文章介绍</title>
