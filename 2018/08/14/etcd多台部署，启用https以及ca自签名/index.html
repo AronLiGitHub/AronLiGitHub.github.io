@@ -102,7 +102,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2018-08-14</span>
-            <span class="time">20:31:16</span>
+            <span class="time">20:36:37</span>
           </span>
           
           <!--  Categories  -->
@@ -133,9 +133,10 @@
 </blockquote>
 <a id="more"></a>
 <h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><blockquote>
-<p>1、三台安装centos7的服务器<br>   2、具备访问互联网</p>
+<p>1、三台安装centos7的服务器<br>2、具备访问互联网<br>3、关闭服务器的防火墙以及selinux</p>
 </blockquote>
-<h2 id="3、关闭服务器的防火墙以及selinux"><a href="#3、关闭服务器的防火墙以及selinux" class="headerlink" title="   3、关闭服务器的防火墙以及selinux"></a>   3、关闭服务器的防火墙以及selinux</h2><h2 id="服务器拓扑"><a href="#服务器拓扑" class="headerlink" title="服务器拓扑"></a>服务器拓扑</h2><p><img src="https://upload-images.jianshu.io/upload_images/13423234-38a4263e5928cb9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="etcd集群拓扑"></p>
+<hr>
+<h2 id="服务器拓扑"><a href="#服务器拓扑" class="headerlink" title="服务器拓扑"></a>服务器拓扑</h2><p><img src="https://upload-images.jianshu.io/upload_images/13423234-38a4263e5928cb9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="etcd集群拓扑"></p>
 <blockquote>
 <p>服务器部署组件以及IP清单</p>
 </blockquote>
@@ -170,9 +171,10 @@
 <p>下载CFSSL的可执行二进制文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 </span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 </span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64</span><br><span class="line">chmod +x cfssl*</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <h4 id="下载执行过程截图如下"><a href="#下载执行过程截图如下" class="headerlink" title="下载执行过程截图如下"></a>下载执行过程截图如下</h4><blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/13423234-0417209515272faf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="安装wget工具"><br><img src="https://upload-images.jianshu.io/upload_images/13423234-a468ec85ee2a0361.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="下载文件的过程"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/13423234-0417209515272faf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="安装wget工具"><br><img src="https://upload-images.jianshu.io/upload_images/13423234-a468ec85ee2a0361.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="下载文件的过程"><br><img src="https://upload-images.jianshu.io/upload_images/13423234-4f2f93fec52331c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="给文件添加执行权限"></p>
 </blockquote>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://upload-images.jianshu.io/upload_images/13423234-4f2f93fec52331c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="给文件添加执行权限"></h2><blockquote>
+<hr>
+<blockquote>
 <p>将这三个二进制可执行文件，修改名称复制到/usr/local/bin/下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp -v cfssl_linux-amd64 /usr/local/bin/cfssl</span><br><span class="line">cp -v cfssljson_linux-amd64 /usr/local/bin/cfssljson</span><br><span class="line">cp -v cfssl-certinfo_linux-amd64 /usr/local/bin/cfssl-certinfo</span><br><span class="line">ls /usr/local/bin/cfssl*</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <blockquote>
