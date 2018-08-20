@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="你们的威哥">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="处理java访问mysql连接数太多的错误"/>
+  <meta property="og:description" content="" />
+  <meta property="og:site_name" content="你们威哥的博客"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://aronligithub.github.io"/>
+  
+    <link rel="alternate" href="/atom.xml" title="你们威哥的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <!-- Site Title -->
+  <title>你们威哥的博客</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  
+  <link rel="stylesheet" href="/css/style.light.css">
+
+  <!-- Google Analytics -->
+  
+
+
+</head>
+
+  <body >
+	
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/city_technology.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">处理java访问mysql连接数太多的错误</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/AronLiGitHub">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:357018097@qq.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+            <!-- Author -->
+            <span class="author info">By 你们的威哥</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2018-08-20</span>
+            <span class="time">21:47:13</span>
+          </span>
+          
+          <!--  Categories  -->
+            <span class="categories info">Under 
+
+<a href="/categories/运维开发系列/">运维开发系列</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+          <div class="post-tags text-muted">
+            Tags: 
+
+<a class="tag" href="/tags/mysql系列/">#mysql系列</a>
+
+
+          </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <blockquote>
+<p>#原创内容，转载请注明出处</p>
+</blockquote>
+<p>博主地址：<a href="https://aronligithub.github.io/">https://aronligithub.github.io/</a></p>
+<blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在生产环境处理故障的过程出现了java服务连接mysql，由于连接数太多被拒绝连接的故障，那么下面来看看怎么优化一下吧。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/13423234-b243a56896371b8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<a id="more"></a>
+<blockquote>
+<p><strong>故障摘要</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">java.sql.SQLException: null,  message from server: &quot;Host &apos;mysql_server_ip&apos; is blocked because of many connection errors; unblock with &apos;mysqladmin flush-hosts&apos;&quot;</span><br><span class="line">        at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:964) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:897) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:886) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1040) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2205) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2236) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2035) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.ConnectionImpl.&lt;init&gt;(ConnectionImpl.java:790) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br><span class="line">        at com.mysql.jdbc.JDBC4Connection.&lt;init&gt;(JDBC4Connection.java:47) ~[mysql-connector-java-5.1.41.jar!/:5.1.41]</span><br></pre></td></tr></table></figure>
+<p><strong>可以从服务端日志中看出，提示了故障信息：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.sql.SQLException: null,  message from server: &quot;Host &apos;mysql_server_ip&apos; is blocked because of many connection errors; unblock with &apos;mysqladmin flush-hosts&apos;&quot;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p><strong>那么该如何快速处理并优化一下呢？</strong></p>
+</blockquote>
+<ul>
+<li><p>首先为了快速恢复服务，先对mysql主从两台服务进行重启处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后观察服务端的错误日志，对mysql的连接相关参数进行优化</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>关于mysql连接数优化的参数</strong></p>
+</blockquote>
+<p>对于java连接mysql，是有mysql连接池的，如果提示该错误，可以往这两个方向对mysql优化一下：<br>1.配置mysql的最大连接数<br>2.配置centos7服务器的文件打开数<br>3.配置mysql连接最长等待超时时间</p>
+<blockquote>
+<p><strong><em>1.配置mysql的最大连接数</em></strong></p>
+</blockquote>
+<p>配置mysql最大连接数分为两种方式：<br>1.第一种修改my.cnf文件，需要mysql服务重启后生效<br>2.第二种直接修改global variables参数</p>
+<p><strong>那么该如何处理呢，如果mysqld服务正在运行？</strong></p>
+<ul>
+<li>首先我会修改global variables参数</li>
+<li>然后修改my.cnf文件<br><strong>这样处理的好处就是立即可以修改参数，不需要重启mysqld服务。当mysqld服务重启的时候，参数也会自动生效。</strong></li>
+</ul>
+<blockquote>
+<p><strong>使用修改global variables参数的方式，修改mysql最大连接数的相关命令</strong><br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#查看最大连接数：</span><br><span class="line">show variables like '%max_connections%';</span><br><span class="line">#临时增加最大连接数：</span><br><span class="line">mysql&gt; <span class="keyword">set</span> global max_connections=<span class="number">10000</span>;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>修改my.cnf文件(<code>/etc/my.cnf</code>)的方式，修改mysql的最大连接数</strong></p>
+</blockquote>
+<p>设置最大连接数：<code>max_connections=10000</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@ibmserver10 ~]# cat /etc/my.cnf</span><br><span class="line"># For advice on how to change settings please see</span><br><span class="line"># http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># Remove leading # and set to the amount of RAM for the most important data</span><br><span class="line"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</span><br><span class="line"># innodb_buffer_pool_size = 128M</span><br><span class="line">#</span><br><span class="line"># Remove leading # to turn on a very important data integrity option: logging</span><br><span class="line"># changes to the binary log between backups.</span><br><span class="line"># log_bin</span><br><span class="line">#</span><br><span class="line"># Remove leading # to set options mainly useful for reporting servers.</span><br><span class="line"># The server defaults are faster for transactions and fast SELECTs.</span><br><span class="line"># Adjust sizes as needed, experiment to find the optimal values.</span><br><span class="line"># join_buffer_size = 128M</span><br><span class="line"># sort_buffer_size = 2M</span><br><span class="line"># read_rnd_buffer_size = 2M</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">socket=/var/lib/mysql/mysql.sock</span><br><span class="line"></span><br><span class="line"># Disabling symbolic-links is recommended to prevent assorted security risks</span><br><span class="line">symbolic-links=0</span><br><span class="line"></span><br><span class="line">log-error=/var/log/mysqld.log</span><br><span class="line">pid-file=/var/run/mysqld/mysqld.pid</span><br><span class="line"></span><br><span class="line">## set max_connections </span><br><span class="line">max_connections=10000</span><br><span class="line"></span><br><span class="line">## set tempdir</span><br><span class="line">tmpdir=/data/mysql/mysqlData/mysql_tmp</span><br><span class="line"></span><br><span class="line">## set innodb_buffer_pool_size</span><br><span class="line">innodb_buffer_pool_size=2G</span><br><span class="line"></span><br><span class="line">sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</span><br><span class="line">[root@ibmserver10 ~]#</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong><em>2.配置mysql连接最长等待超时时间（wait_timeout）</em></strong></p>
+</blockquote>
+<ul>
+<li>这个<code>wait_timeout</code>的作用是，设置非交互连接（就是指那些连接池方式、非客户端方式连接的）的超时时间，默认是<code>28800</code>，就是<code>8小时</code>，超过这个时间，mysql服务器会主动切断那些已经连接的，但是状态是<code>sleep</code>的连接。</li>
+<li>修改<code>wait_timeout</code>可能出现的程序错误：<br>当服务器端去连接mysql的时候，连接池里的连接已经被mysql主动断开，这时取回的连接就是null，再加上程序里对此没有做判断的话，接下来的对数据库的一系列的操作都会出现问题。</li>
+</ul>
+<p><strong><em>那么基本知道了好处以及坏处之后，我们下面来看看怎么配置。</em></strong></p>
+<blockquote>
+<p><strong>查询mysql的连接等待时间</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; show global variables like &quot;wait_timeout&quot;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| wait_timeout  | 28800 |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>可以看到，现在的mysql等待连接时间是<a href="">28800秒</a> = <a href="">8小时</a></strong></p>
+<blockquote>
+<p><strong>那么这里就带来另一个问题了，这个等待时间设置为多久比较好呢？</strong><br>wait_timeout过大有弊端，其体现就是MySQL里大量的SLEEP进程无法及时释放，拖累系统性能，不过也不能把这个指设置的过小，否则你可 能会遭遇到“MySQL has gone away”之类的问题。<br>这种情况只能靠实际情况配置了。</p>
+</blockquote>
+<blockquote>
+<p>java服务通常连接mysql的业务操作不会超过几分钟，那么设置个几百秒即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set global wait_timeout = 200;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>那么就设置200秒即可。</p>
+<blockquote>
+<p>但是有一种情况比较特殊，例如用户在使用导出报表等数据处理功能，有些时间选择导出一个月。这个时候就会可能出现mysql连接丢失的情况。</p>
+</blockquote>
+<p>如果碰到这种情况，最好再调整一下mysql的时间，选择一个适中的。</p>
+<blockquote>
+<p><strong>使用my.cnf文件设置wait_timeout参数</strong></p>
+</blockquote>
+<p>前面讲述的是使用global variables参数的方式修改wait_timeout的参数值。下面示例使用my.cnf文件的配置：<br><code>wait_timeout=200</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[root@ibmserver10 ~]# cat /etc/my.cnf</span><br><span class="line"># For advice on how to change settings please see</span><br><span class="line"># http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">#</span><br><span class="line"># Remove leading # and set to the amount of RAM for the most important data</span><br><span class="line"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</span><br><span class="line"># innodb_buffer_pool_size = 128M</span><br><span class="line">#</span><br><span class="line"># Remove leading # to turn on a very important data integrity option: logging</span><br><span class="line"># changes to the binary log between backups.</span><br><span class="line"># log_bin</span><br><span class="line">#</span><br><span class="line"># Remove leading # to set options mainly useful for reporting servers.</span><br><span class="line"># The server defaults are faster for transactions and fast SELECTs.</span><br><span class="line"># Adjust sizes as needed, experiment to find the optimal values.</span><br><span class="line"># join_buffer_size = 128M</span><br><span class="line"># sort_buffer_size = 2M</span><br><span class="line"># read_rnd_buffer_size = 2M</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">socket=/var/lib/mysql/mysql.sock</span><br><span class="line"></span><br><span class="line"># Disabling symbolic-links is recommended to prevent assorted security risks</span><br><span class="line">symbolic-links=0</span><br><span class="line"></span><br><span class="line">log-error=/var/log/mysqld.log</span><br><span class="line">pid-file=/var/run/mysqld/mysqld.pid</span><br><span class="line"></span><br><span class="line">## set max_connections </span><br><span class="line">max_connections=10000</span><br><span class="line"></span><br><span class="line">## set wait_timeout</span><br><span class="line">wait_timeout=200</span><br><span class="line"></span><br><span class="line">## set tempdir</span><br><span class="line">tmpdir=/data/mysql/mysqlData/mysql_tmp</span><br><span class="line"></span><br><span class="line">## set innodb_buffer_pool_size</span><br><span class="line">innodb_buffer_pool_size=2G</span><br><span class="line"></span><br><span class="line">sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</span><br><span class="line">[root@ibmserver10 ~]#</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看是否配置生效：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show global variables like &quot;wait_timeout&quot;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| wait_timeout  | 200   |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>可以看出已经配置生效了。</strong></p>
+<blockquote>
+<p>如果你想要看我写的总体系列文章目录介绍，可以点击<a href="https://www.jianshu.com/p/4a9c06ea570b" target="_blank" rel="noopener">kuberntes以及运维开发文章目录介绍</a></p>
+</blockquote>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+    <!-- Footer -->
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer>
+
+  <!--pv的方式，单个用户连续点击n篇文章，记录n次访问量-->
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Theme By <a target="_blank" href="https://github.com/levblanc">Levblanc.</a>
+          Inspired By <a target="_blank" href="https://github.com/klugjo/hexo-theme-clean-blog">Clean Blog.</a>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+
+    <!-- After Footer Scripts -->
+<script src="/js/highlight.pack.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+   	
+  </body>
+</html>
+
